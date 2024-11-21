@@ -26,15 +26,21 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts"
-import { CompanyFinancials } from "@/types/company"
+import { CompanyFinancials, CompanyExportFormat } from "@/types/company"
 import Loading from "@/app/loading"
 import { motion } from "framer-motion"
 
 import { DatePicker } from "@nextui-org/date-picker"
 import { parseDate } from "@internationalized/date"
 import * as XLSX from "xlsx"
-import jsPDF from "jspdf"
+import { jsPDF } from "jspdf"
 import "jspdf-autotable"
+import { UserOptions } from "jspdf-autotable"
+
+interface jsPDFCustom extends jsPDF {
+  autoTable: (options: UserOptions) => void
+}
+
 const CompanyComparison = () => {
   const [companies, setCompanies] = useState<CompanyFinancials[]>([])
   const [selectedCompanies, setSelectedCompanies] = useState<string[]>([])
@@ -168,7 +174,8 @@ const CompanyComparison = () => {
     }
   }
 
-  const exportToCSV = (data: any[], exportName: string) => {
+  const exportToCSV = (data: CompanyExportFormat[], exportName: string) => {
+    // console.log(data, "data///////")
     const csvContent = [
       Object.keys(data[0]).join(","),
       ...data.map((item) => Object.values(item).join(",")),
@@ -185,7 +192,7 @@ const CompanyComparison = () => {
     document.body.removeChild(link)
   }
 
-  const exportToExcel = (data: any[], exportName: string) => {
+  const exportToExcel = (data: CompanyExportFormat[], exportName: string) => {
     const worksheet = XLSX.utils.json_to_sheet(data)
     const workbook = XLSX.utils.book_new()
     XLSX.utils.book_append_sheet(workbook, worksheet, "Financials")
@@ -206,10 +213,11 @@ const CompanyComparison = () => {
     document.body.removeChild(link)
   }
 
-  const exportToPDF = (data: any[], exportName: string) => {
-    const doc = new jsPDF()
+  const exportToPDF = (data: CompanyExportFormat[], exportName: string) => {
+    const doc = new jsPDF() as jsPDFCustom
+
     doc.text(`${exportName} Financials`, 14, 15)
-    ;(doc as any).autoTable({
+    doc.autoTable({
       startY: 25,
       head: [Object.keys(data[0])],
       body: data.map((item) => Object.values(item)),

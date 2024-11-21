@@ -17,3 +17,19 @@ export interface CompanyFinancials {
   lastDividend: number
   lastUpdated: string
 }
+
+export interface CompanyExportFormat {
+  Symbol: string
+  Name: string
+  "Total Shares": number
+  "Promoter Holding": number
+  "Revenue-Current": number
+  "Revenue-Previous Quarter": number
+  "Revenue-Previous Year": number
+  "Fixed Assets": number
+  "Total Liabilities": number
+  "Employee Count": number
+  PAT: number
+  EBITDA: number
+  "Last Updated": string
+}
