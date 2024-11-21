@@ -14,7 +14,7 @@ const SelectTrigger = React.forwardRef<
   >
     <SelectPrimitive.Value
       className=" items-center justify-center text-md"
-      placeholder="select a company to get started"
+      placeholder="Select a company to get started"
     />
     {children}
   </SelectPrimitive.Trigger>
