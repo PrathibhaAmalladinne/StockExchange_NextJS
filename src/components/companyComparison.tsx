@@ -47,10 +47,11 @@ const CompanyComparison = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [exportStep, setExportStep] = useState(1)
   const [exportName, setExportName] = useState("")
-  const [startDate, setStartDate] = useState(parseDate("2024-01-01"))
-  const [endDate, setEndDate] = useState(parseDate("2024-04-28"))
+  const [startDate, setStartDate] = useState(parseDate("2023-03-10"))
+  const [endDate, setEndDate] = useState(parseDate("2024-03-10"))
   const [exportReason, setExportReason] = useState("")
   const [exportFormat, setExportFormat] = useState("csv")
+
   let formatter = useDateFormatter({ dateStyle: "full" })
 
   useEffect(() => {
@@ -120,7 +121,7 @@ const CompanyComparison = () => {
       return lastUpdated >= date1 && lastUpdated <= date2
     })
   }, [startDate, endDate])
-
+  console.log(filteredData, "filgegcb")
   const dataToExport = filteredData.map((item) => ({
     Symbol: item.symbol,
     Name: item.name,
@@ -142,6 +143,7 @@ const CompanyComparison = () => {
       case "csv":
         if (dataToExport.length !== 0) {
           exportToCSV(dataToExport, exportName)
+          setExportReason("")
           setExportStep(1)
           setIsDialogOpen(false)
           break
@@ -151,6 +153,7 @@ const CompanyComparison = () => {
       case "xlsx":
         if (dataToExport.length !== 0) {
           exportToExcel(dataToExport, exportName)
+          setExportReason("")
           setExportStep(1)
           setIsDialogOpen(false)
           break
@@ -159,6 +162,7 @@ const CompanyComparison = () => {
       case "pdf":
         if (dataToExport.length !== 0) {
           exportToPDF(dataToExport, exportName)
+          setExportReason("")
           setExportStep(1)
           setIsDialogOpen(false)
           break
@@ -260,14 +264,20 @@ const CompanyComparison = () => {
                 Select Date Range
               </label>
             </div>
-            {dataToExport.length === 0 && (
-              <span className=" flex flex-row gap-2">
-                <CircleAlert className="h-10px text-red-500" />
-                <div className="text-sm text-gray-500">
-                  There is no data aligning with these dates, please select
-                  dates again!
-                </div>
-              </span>
+            {exportReason ? (
+              dataToExport.length === 0 ? (
+                <span className=" flex flex-row gap-2">
+                  <CircleAlert className="h-10px text-red-500" />
+                  <div className="text-sm text-gray-500">
+                    There is no data aligning with these dates, please select
+                    dates again!
+                  </div>
+                </span>
+              ) : (
+                ""
+              )
+            ) : (
+              ""
             )}
             <div className="flex flex-row gap-8">
               <div className="w-full flex flex-col gap-y-2">
