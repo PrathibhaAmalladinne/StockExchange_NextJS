@@ -31,7 +31,6 @@ import Loading from "@/app/loading"
 import { motion } from "framer-motion"
 
 import { DatePicker } from "@nextui-org/date-picker"
-import { useDateFormatter } from "@react-aria/i18n"
 import { parseDate } from "@internationalized/date"
 import * as XLSX from "xlsx"
 import jsPDF from "jspdf"
@@ -51,8 +50,6 @@ const CompanyComparison = () => {
   const [endDate, setEndDate] = useState(parseDate("2024-03-10"))
   const [exportReason, setExportReason] = useState("")
   const [exportFormat, setExportFormat] = useState("csv")
-
-  let formatter = useDateFormatter({ dateStyle: "full" })
 
   useEffect(() => {
     const fetchCompanies = async () => {
@@ -120,7 +117,7 @@ const CompanyComparison = () => {
       const date2: Date = new Date(endDate.toString())
       return lastUpdated >= date1 && lastUpdated <= date2
     })
-  }, [startDate, endDate])
+  }, [startDate, endDate, companies])
   console.log(filteredData, "filgegcb")
   const dataToExport = filteredData.map((item) => ({
     Symbol: item.symbol,
@@ -172,7 +169,6 @@ const CompanyComparison = () => {
   }
 
   const exportToCSV = (data: any[], exportName: string) => {
-    // console.log(data, "data///////")
     const csvContent = [
       Object.keys(data[0]).join(","),
       ...data.map((item) => Object.values(item).join(",")),
@@ -212,7 +208,6 @@ const CompanyComparison = () => {
 
   const exportToPDF = (data: any[], exportName: string) => {
     const doc = new jsPDF()
-
     doc.text(`${exportName} Financials`, 14, 15)
     ;(doc as any).autoTable({
       startY: 25,
