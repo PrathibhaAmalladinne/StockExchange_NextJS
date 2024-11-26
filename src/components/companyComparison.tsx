@@ -60,7 +60,20 @@ const CompanyComparison = () => {
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
-        const response = await fetch("/api/companies")
+        const BASE_URL = process.env.VERCEL_URL
+          ? `http://${process.env.VERCEL_URL}`
+          : `http://localhost:3000`
+        const response = await fetch(`${BASE_URL}/api/companies`, {
+          cache: "force-cache",
+          next: { revalidate: 60 },
+        })
+        console.log("Response status:", response.status)
+
+        if (!response.ok) {
+          const errorText = await response.text()
+          console.error("Error response text:", errorText)
+          throw new Error(`HTTP error! status: ${response.status}`)
+        }
         const data = await response.json()
         setCompanies(data)
         setAvailableCompanies(data)
