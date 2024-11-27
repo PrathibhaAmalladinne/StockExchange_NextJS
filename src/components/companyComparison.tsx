@@ -60,10 +60,7 @@ const CompanyComparison = () => {
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
-        const BASE_URL = process.env.VERCEL_URL
-          ? `${process.env.VERCEL_URL}`
-          : `http://localhost:3000`
-        const response = await fetch(`${BASE_URL}/api/companies`, {
+        const response = await fetch(`/api/companies`, {
           cache: "force-cache",
           next: { revalidate: 60 },
         })
