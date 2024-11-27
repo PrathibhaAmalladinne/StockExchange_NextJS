@@ -61,7 +61,7 @@ const CompanyComparison = () => {
     const fetchCompanies = async () => {
       try {
         const BASE_URL = process.env.VERCEL_URL
-          ? `http://${process.env.VERCEL_URL}`
+          ? `${process.env.VERCEL_URL}`
           : `http://localhost:3000`
         const response = await fetch(`${BASE_URL}/api/companies`, {
           cache: "force-cache",
