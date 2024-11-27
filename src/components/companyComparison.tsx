@@ -409,13 +409,13 @@ const CompanyComparison = () => {
               disabled={availableCompanies.length === 0}
             >
               <SelectTrigger
-                className={`w-[280px] text-md rounded-xl border border-gray-200 ${
+                className={`w-[280px] text-md rounded-xl h-fit border border-gray-200 ${
                   availableCompanies.length === 0 && "cursor-no-drop"
                 } `}
               >
                 {selectedCompanies.length > 0 && (
                   <>
-                    <p className="float-left mr-auto text-md font-semibold">
+                    <p className="float-left mr-auto text-md font-semibold p-1">
                       Add a company to compare
                     </p>
                     <p className="float-right">
